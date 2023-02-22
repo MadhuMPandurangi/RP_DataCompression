@@ -81,12 +81,11 @@ if __name__ == "__main__":
 	path = './CSV/compression_stats.csv'
 	isExist = os.path.isfile(path)
 	x = sys.argv[1].split()
-	if(x[3][1].isnumeric()):
-		if(not(isExist)):
-			create_csv.createCSV()
+	if(x[3][2].isnumeric()):
+		level = int(x[3][1])*10 + int(x[3][2])
+		calculate_metrics.computeMetrics(level,x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
+	else:
 		calculate_metrics.computeMetrics(x[3][1],x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
-		
-	
 	
 		
 
