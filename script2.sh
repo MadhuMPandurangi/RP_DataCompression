@@ -1,8 +1,10 @@
 #!/bin/bash
-echo "Enter directory name"
-read direct
-echo "Enter compression tool"
-read tool
+# echo "Enter directory name"
+# read direct
+# echo "Enter compression tool"
+# read tool
+direct="DataSet" # Instead of taking input from previously commented lines, setting the variable values
+tool="zstd"
 
 if [ $tool = "zip" ]
  then
@@ -34,12 +36,13 @@ elif [ $tool = "zstd" ]
 		for((level = 1; level <= 21; level++))
 		do
 		echo "level - $level Compressing using zstd now"
-		python3 script.py "tar -I 'zstd -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level"
+		python3 script.py "tar -I 'zstd -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level" "file: $file_name"
 		echo "Decompressing using zstd now"
-		python3 script.py "tar -I 'zstd --decompress' -xf archive.tar.zst $file_name" "decompression using zstd"
+		python3 script.py "tar -I 'zstd --decompress' -xf archive.tar.zst $file_name" "decompression using zstd, level $level" "file: $file_name"
 		echo -e "\n"
 		done
 	done
+	# beeps after the execution
 	speaker-test -t sine -f 1000 -l 1 & sleep .2 && kill -9 $!
 else
 	echo "Invalid tool" 
