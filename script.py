@@ -62,7 +62,7 @@ if __name__ == "__main__":
 	plt.bar(time_values, cpu_usage_list)
 	plt.xlabel("Time interval")
 	plt.ylabel("CPU usage in percentage")
-	plt.title("CPU usage for " + sys.argv[2])
+	plt.title("CPU usage for " + sys.argv[2] + ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
 	plt.savefig('./plots/CPU usage for ' + sys.argv[2] + '.png')
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 	plt.bar(time_values, memory_percent_usage_list)
 	plt.xlabel("Time interval")
 	plt.ylabel("Memory usage in percentage")
-	plt.title("Memory usage for " + sys.argv[2])
+	plt.title("Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
 	plt.savefig('./plots/Memory usage for ' + sys.argv[2] + '.png')
@@ -84,11 +84,7 @@ if __name__ == "__main__":
 	if(x[3][1].isnumeric()):
 		if(not(isExist)):
 			create_csv.createCSV()
-		if(x[3][2].isnumeric()):
-			level = int(x[3][1])*10 + int(x[3][2])
-			calculate_metrics.computeMetrics(level,x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
-		else:
-			calculate_metrics.computeMetrics(x[3][1],x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
+		calculate_metrics.computeMetrics(x[3][1],x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
 		
 	
 	
