@@ -51,6 +51,14 @@ if __name__ == "__main__":
 	
 	t2.join()
 	t1.join()
+
+	x = sys.argv[1].split()
+	org_file_size = os.stat('./{}'.format(x[6]))
+	size = org_file_size.st_size
+	sizeToStr = str(size)
+	plotsPath = './plots/'+sizeToStr
+	if not os.path.exists(plotsPath):
+		os.makedirs(plotsPath)
 	
 	#pad_values()
 	
@@ -65,7 +73,7 @@ if __name__ == "__main__":
 	plt.title("CPU usage for " + sys.argv[2] + ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./plots/CPU usage for ' + sys.argv[2] + '.png')
+	plt.savefig('./'+plotsPath+'/CPU usage for ' + sys.argv[2] + '.png')
 	plt.close()
 	
 	plt.bar(time_values, memory_percent_usage_list)
@@ -74,7 +82,7 @@ if __name__ == "__main__":
 	plt.title("Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./plots/Memory usage for ' + sys.argv[2] + '.png')
+	plt.savefig('./'+plotsPath+'/Memory usage for ' + sys.argv[2] + '.png')
 	plt.close()
 	
 
