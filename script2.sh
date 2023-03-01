@@ -33,13 +33,22 @@ elif [ $tool = "zstd" ]
 	# read level
 	for file_name in "$direct"/*
 	do
-		for((level = 1; level <= 21; level++))
+		# for((level = 1; level <= 19; level++))
+		# do
+		# 	echo "level - $level Compressing using zstd now"
+		# 	python3 script.py "tar -I 'zstd -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level" "file: $file_name"
+		# 	echo "Decompressing using zstd now"
+		# 	python3 script.py "tar -I 'zstd --decompress' -xf archive.tar.zst $file_name" "decompression using zstd, level $level" "file: $file_name"
+		# 	echo -e "\n"
+		# done
+
+		for((level = 20; level <= 22; level++))
 		do
-		echo "level - $level Compressing using zstd now"
-		python3 script.py "tar -I 'zstd -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level" "file: $file_name"
-		echo "Decompressing using zstd now"
-		python3 script.py "tar -I 'zstd --decompress' -xf archive.tar.zst $file_name" "decompression using zstd, level $level" "file: $file_name"
-		echo -e "\n"
+			echo "level - $level Compressing using zstd now"
+			python3 script.py "tar -I 'zstd --ultra -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level" "file: $file_name"
+			echo "Decompressing using zstd now"
+			python3 script.py "tar -I 'zstd --decompress' -xf archive.tar.zst $file_name" "decompression using zstd, level $level" "file: $file_name"
+			echo -e "\n"
 		done
 	done
 	# beeps after the execution
