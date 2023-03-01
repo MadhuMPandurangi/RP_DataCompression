@@ -31,4 +31,3 @@ def populateCSV(org_file_size,level,avg_mem_usage, avg_cpu_usage, compSpeed, com
 		writer_object = writer(csv_object)
 		writer_object.writerow(row)
 		csv_object.close()
- 
