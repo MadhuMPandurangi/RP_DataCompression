@@ -35,6 +35,7 @@ elif [ $tool = "zstd" ]
 	do
 		for((level = 1; level <= 19; level++))
 		do
+		#cache being cleared after each level of compression
 			echo "Clearing Cache"
 			sync; echo 3 > /proc/sys/vm/drop_caches 
 			echo "level - $level Compressing using zstd now"
