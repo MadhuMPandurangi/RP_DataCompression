@@ -35,6 +35,8 @@ elif [ $tool = "zstd" ]
 	do
 		for((level = 1; level <= 19; level++))
 		do
+			echo "Clearing Cache"
+			sync; echo 3 > /proc/sys/vm/drop_caches 
 			echo "level - $level Compressing using zstd now"
 			python3 script.py "tar -I 'zstd -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level" "file: $file_name"
 			echo "Decompressing using zstd now"
@@ -44,6 +46,8 @@ elif [ $tool = "zstd" ]
 
 		for((level = 20; level <= 22; level++))
 		do
+			echo "Clearing Cache"
+			sync; echo 3 > /proc/sys/vm/drop_caches 
 			echo "level - $level Compressing using zstd now"
 			python3 script.py "tar -I 'zstd --ultra -$level' -cf archive.tar.zst $file_name" "compression using zstd, level $level" "file: $file_name"
 			echo "Decompressing using zstd now"
