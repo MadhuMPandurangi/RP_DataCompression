@@ -5,12 +5,18 @@ import time
 import sys
 import matplotlib.pyplot as plt
 import calculate_metrics
+import subprocess
+import re
 from CSV import create_csv
 
 flag = 1
 cpu_usage_list = []
 memory_percent_usage_list = []
 compression_time = 0
+rkbps_list = []
+wkbps_list = []
+dkbps_list = []
+util_list = []
 
 def compress():
 	global flag,compression_time
@@ -22,13 +28,27 @@ def compress():
 	flag = 0
 	
 def monitor():
-	global flag,cpu_usage_list
+	global flag,cpu_usage_list, rkbps_list, wkbps_list, dkbps_list, util_list
 	while(flag):
 		x = psutil.cpu_percent(0.5)
 		cpu_usage_list.append(x)
 		y = psutil.virtual_memory()[2]
 		memory_percent_usage_list.append(y)
-		
+		output = subprocess.check_output(["sar", "-d", "1", "1"])
+		output = output.decode("utf-8")
+		lines = output.split("\n")
+		for line in lines:
+			if re.search("^Average.*dev8.*", line):
+				fields = line.split()
+				rkbps = fields[3]
+				wkbps = fields[4]
+				dkbps = fields[5]
+				util = fields[9]
+				rkbps_list.append(float(rkbps))
+				wkbps_list.append(float(wkbps))
+				dkbps_list.append(float(dkbps))
+				util_list.append(float(util))
+
 def pad_values():
 	global cpu_usage_list,memory_percent_usage_list
 	start_time = time.time()
@@ -91,13 +111,13 @@ if __name__ == "__main__":
 	x = sys.argv[1].split()
 	if(x[3][2].isnumeric()):
 		level = int(x[3][1])*10 + int(x[3][2])
-		calculate_metrics.computeMetrics(level,x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
+		calculate_metrics.computeMetrics(level,x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list, rkbps_list, wkbps_list, dkbps_list, util_list)
 	else:
 		if(x[3][1].isnumeric()):
-			calculate_metrics.computeMetrics(x[3][1],x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list)
+			calculate_metrics.computeMetrics(x[3][1],x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list, rkbps_list, wkbps_list, dkbps_list, util_list)
 		elif(x[4][1].isnumeric()):
 			level = int(x[4][1])*10 + int(x[4][2])
-			calculate_metrics.computeMetrics(level,x[6], x[7], compression_time,cpu_usage_list,memory_percent_usage_list)
+			calculate_metrics.computeMetrics(level,x[6], x[7], compression_time,cpu_usage_list,memory_percent_usage_list, rkbps_list, wkbps_list, dkbps_list, util_list)
 	
 		
 
