@@ -7,3 +7,5 @@ miscellaneous/
 archive.tar.zst
 DataSet/
 plots/
+demo.py
+diskActivity.py
