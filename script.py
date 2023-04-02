@@ -108,9 +108,11 @@ if __name__ == "__main__":
 
 	path = './CSV/compression_stats.csv'
 	isExist = os.path.isfile(path)
+	if(not(isExist)):
+		create_csv.createCSV()
 	x = sys.argv[1].split()
 	if(x[3][2].isnumeric()):
-		level = int(x[3][1])*10 + int(x[3][2])
+		level = int(x[3][1])*10 + int(x[3][2])	
 		calculate_metrics.computeMetrics(level,x[5], x[6], compression_time,cpu_usage_list,memory_percent_usage_list, rkbps_list, wkbps_list, dkbps_list, util_list)
 	else:
 		if(x[3][1].isnumeric()):
