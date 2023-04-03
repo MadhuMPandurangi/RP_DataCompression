@@ -24,7 +24,7 @@ def compress():
 	print(sys.argv[1])
 	os.system(sys.argv[1])
 	final_time = time.time()
-	compression_time = round(final_time - start_time,2)
+	compression_time = round(final_time - start_time,5)
 	flag = 0
 	
 def monitor():
@@ -38,7 +38,7 @@ def monitor():
 		output = output.decode("utf-8")
 		lines = output.split("\n")
 		for line in lines:
-			if re.search("^Average.*dev8.*", line):
+			if re.search("^Average.*sda.*", line):
 				fields = line.split()
 				rkbps = fields[3]
 				wkbps = fields[4]
@@ -52,8 +52,8 @@ def monitor():
 def pad_values():
 	global cpu_usage_list,memory_percent_usage_list
 	start_time = time.time()
-	while(time.time() - start_time <= 1.0):
-		x = psutil.cpu_percent(0.5)
+	while(time.time() - start_time <= 0.001):
+		x = psutil.cpu_percent(0.0005)
 		y = psutil.virtual_memory()[2]
 		cpu_usage_list.append(x)
 		memory_percent_usage_list.append(y)
@@ -85,9 +85,11 @@ if __name__ == "__main__":
 	l = len(cpu_usage_list)
 	time_values = []
 	for i in range(l):
-		time_values.append(f"{(i)*0.5}-{(i+1)*0.5}")
+		time_values.append(f"{(i)*0.0005}-{(i+1)*0.0005}")
+
+	x = len(time_values)
 	
-	plt.bar(time_values, cpu_usage_list)
+	plt.bar(time_values, cpu_usage_list, color = 'r')
 	plt.xlabel("Time interval")
 	plt.ylabel("CPU usage in percentage")
 	plt.title("CPU usage for " + sys.argv[2] + ', ' + sys.argv[3])
@@ -100,6 +102,17 @@ if __name__ == "__main__":
 	plt.xlabel("Time interval")
 	plt.ylabel("Memory usage in percentage")
 	plt.title("Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
+	plt.tick_params(axis='x', labelrotation=-45)
+	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
+	plt.savefig('./'+plotsPath+'/Memory usage for ' + sys.argv[2] + '.png')
+	plt.close()
+
+	#plt.bar(time_values, rkbps_list)
+	#plt.bar(time_values, wkbps_list)
+	plt.bar(time_values, util_list)
+	plt.xlabel("Time interval")
+	plt.ylabel("(MEM_UTIL using sar) Memory usage in percentage")
+	plt.title("SAR Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
 	plt.savefig('./'+plotsPath+'/Memory usage for ' + sys.argv[2] + '.png')
