@@ -55,6 +55,10 @@ elif [ $tool = "zstd" ]
 			python3 script.py "tar -I 'zstd --decompress' -xf archive.tar.zst $file_name" "decompression using zstd, level $level" "file: $file_name"
 			echo -e "\n"
 		done
+
+  		# Generate the bar graph
+  		python3 plot_perfomance.py "$compression_stats.csv" "$file_name"	
+
 	done
 	# beeps after the execution
 	speaker-test -t sine -f 1000 -l 1 & sleep .2 && kill -9 $!

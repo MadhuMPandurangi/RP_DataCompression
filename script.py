@@ -24,7 +24,7 @@ def compress():
 	print(sys.argv[1])
 	os.system(sys.argv[1])
 	final_time = time.time()
-	compression_time = round(final_time - start_time,2)
+	compression_time = round(final_time - start_time,5)
 	flag = 0
 	
 def monitor():
@@ -94,7 +94,9 @@ if __name__ == "__main__":
 	l = len(cpu_usage_list)
 	time_values = []
 	for i in range(l):
-		time_values.append(f"{(i)*0.5}-{(i+1)*0.5}")
+		time_values.append(f"{(i)*0.0005}-{(i+1)*0.0005}")
+
+	x = len(time_values)
 	
 	plt.plot(time_values, cpu_usage_list)	
 	plt.xlabel("Time interval")
