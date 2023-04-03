@@ -8,7 +8,7 @@ mypath = ('/home/kannan/Desktop/DATA COMPRESSION/RP_DataCompression/plots/summar
 
 # Loop through each file size and each column and create a bar graph
 for file_size in df['File_size'].unique():
-    df_filtered = df[df['File_size'] == file_size]
+    df_filtered = gdf[df['File_size'] == file_size]
     for col in df.columns[1:]:
         plt.figure()
         for i in range(1, 23):

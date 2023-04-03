@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import statistics
 
 # Set the path to the folder containing the files
-path = "DataSet/github"
+path = "DataSet/"
 
 # Initialize variables for file sizes and serial numbers
 sizes = []
@@ -26,6 +26,6 @@ plt.hist(sizes, bins=20)
 plt.xlabel('File Size')
 plt.ylabel('Frequency')
 plt.title('Histogram of File Sizes')
-plt.text(20, max(plt.ylim())/2, f'Median File Size: {median_size}\nMean File')
-#plt.text(100, max(plt.ylim())/2, f'Mean File Size: {mean_size}\nMean File')
+plt.text(80, max(plt.ylim())/2, f'Median File Size: {median_size}\nMean File')
+plt.text(80, max(plt.ylim())/2 + 20, f'Mean File Size: {mean_size}\nMean File')
 plt.show()
