@@ -1,9 +1,9 @@
 #!/bin/bash
-# echo "Enter directory name"
-# read direct
+echo "Enter directory name"
+read direct
 # echo "Enter compression tool"
 # read tool
-direct="DataSet" # Instead of taking input from previously commented lines, setting the variable values
+#direct="DataSet" # Instead of taking input from previously commented lines, setting the variable values
 tool="zstd"
 
 if [ $tool = "zip" ]
