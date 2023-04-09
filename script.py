@@ -76,10 +76,26 @@ if __name__ == "__main__":
 	org_file_size = os.stat('./{}'.format(x[6]))
 	size = org_file_size.st_size
 	sizeToStr = str(size)
+	# create directory for plots
 	plotsPath = './plots/'+sizeToStr
 	if not os.path.exists(plotsPath):
 		os.makedirs(plotsPath)
-	
+
+	ls = sys.argv[2].split()
+	dir = ls[0]
+	#create directory for memory usage compression/decompression statistics
+	mem = './plots/'+sizeToStr+'/memoryUsage/'+dir
+	if not os.path.exists(mem):
+		os.makedirs(mem)
+
+
+
+	#create directory for cpu usage compression/decompression statistics
+	cpu = './plots/'+sizeToStr+'/cpuUsage/'+dir
+	if not os.path.exists(cpu):
+		os.makedirs(cpu)
+
+
 	#pad_values()
 	ax = plt.gca()
 	
@@ -88,6 +104,7 @@ if __name__ == "__main__":
 	for i in range(l):
 		time_values.append(f"{(i)*0.5}-{(i+1)*0.5}")
 	
+
 	#ax=plt.subplot()
 	plt.plot(time_values, cpu_usage_list)
 	plt.xlabel("Time interval")
@@ -99,7 +116,6 @@ if __name__ == "__main__":
 	plt.xlim(0,10)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
 	plt.savefig('./'+plotsPath+'/CPU usage for ' + sys.argv[2] + '.png')
-	#plt.show()
 	plt.close()
 	
 	plt.plot(time_values, memory_percent_usage_list)
@@ -114,7 +130,7 @@ if __name__ == "__main__":
 	#plt.show()
 	plt.close()
 	
-
+	
 	path = './CSV/compression_stats.csv'
 	isExist = os.path.isfile(path)
 	if(not(isExist)):
