@@ -24,8 +24,6 @@ def compress():
 	print(sys.argv[1])
 	os.system(sys.argv[1])
 	final_time = time.time()
-	# print(start_time)
-	# print(final_time)
 	compression_time = round(final_time - start_time,2)
 	flag = 0
 	
@@ -98,9 +96,6 @@ if __name__ == "__main__":
 	for i in range(l):
 		time_values.append(f"{(i)*0.5}-{(i+1)*0.5}")
 	
-	for i in cpu_usage_list:
-		print(i)
-
 	plt.plot(time_values, cpu_usage_list)	
 	plt.xlabel("Time interval")
 	plt.ylabel("CPU usage in percentage")
