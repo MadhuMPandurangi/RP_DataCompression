@@ -81,6 +81,8 @@ if __name__ == "__main__":
 	if not os.path.exists(plotsPath):
 		os.makedirs(plotsPath)
 
+	ax = plt.gca()
+
 	ls = sys.argv[2].split()
 	dir = ls[0]
 	#create directory for memory usage compression/decompression statistics
@@ -107,7 +109,8 @@ if __name__ == "__main__":
 	plt.xlabel("Time interval")
 	plt.ylabel("CPU usage in percentage")
 	plt.title("CPU usage for " + sys.argv[2] + ', ' + sys.argv[3])
-	plt.tick_params(axis='x', labelrotation=-45)
+	plt.tick_params(axis='x', labelrotation=90, labelsize=6, which='major', pad=8)
+	plt.xlim(0,10)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
 	plt.savefig('./'+cpu+'/'+'/CPU usage for ' + sys.argv[2] + '.png')
 	plt.close()
@@ -116,7 +119,8 @@ if __name__ == "__main__":
 	plt.xlabel("Time interval")
 	plt.ylabel("Memory usage in percentage")
 	plt.title("Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
-	plt.tick_params(axis='x', labelrotation=-45)
+	plt.tick_params(axis='x', labelrotation=90, labelsize=6, which='major', pad=8)
+	plt.xlim(0,10)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
 	plt.savefig('./'+mem+'/Memory usage for ' + sys.argv[2] + '.png')
 	plt.close()
