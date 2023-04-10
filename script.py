@@ -97,37 +97,28 @@ if __name__ == "__main__":
 
 
 	#pad_values()
-	ax = plt.gca()
 	
 	l = len(cpu_usage_list)
 	time_values = []
 	for i in range(l):
 		time_values.append(f"{(i)*0.5}-{(i+1)*0.5}")
 	
-
-	#ax=plt.subplot()
-	plt.plot(time_values, cpu_usage_list)
+	plt.plot(time_values, cpu_usage_list)	
 	plt.xlabel("Time interval")
 	plt.ylabel("CPU usage in percentage")
 	plt.title("CPU usage for " + sys.argv[2] + ', ' + sys.argv[3])
-	#ax.set_xticks(ax.get_xticks()[::2])
-	plt.tick_params(axis='x', labelrotation=90, labelsize=6, which='major', pad=8)
-	#plt.setp(ax.get_xticklabels(), rotation=90, ha='right')
-	plt.xlim(0,10)
+	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./'+plotsPath+'/CPU usage for ' + sys.argv[2] + '.png')
+	plt.savefig('./'+cpu+'/'+'/CPU usage for ' + sys.argv[2] + '.png')
 	plt.close()
 	
 	plt.plot(time_values, memory_percent_usage_list)
 	plt.xlabel("Time interval")
 	plt.ylabel("Memory usage in percentage")
 	plt.title("Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
-	#ax.set_xticks(ax.get_xticks()[::2])
-	plt.tick_params(axis='x', labelrotation=90, labelsize=6, which='major', pad=8)
-	plt.xlim(0,10)
+	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./'+plotsPath+'/Memory usage for ' + sys.argv[2] + '.png')
-	#plt.show()
+	plt.savefig('./'+mem+'/Memory usage for ' + sys.argv[2] + '.png')
 	plt.close()
 	
 	
