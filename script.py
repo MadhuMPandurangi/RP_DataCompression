@@ -34,41 +34,36 @@ def monitor():
 		cpu_usage_list.append(x)
 		y = psutil.virtual_memory()[2]
 		memory_percent_usage_list.append(y)
-		output = subprocess.check_output(["sar", "-d", "1", "1"])
-		output = output.decode("utf-8")
-		lines = output.split("\n")
-		for line in lines:
-			if re.search("^Average.*sda.*", line):
-				fields = line.split()
-				rkbps = fields[3]
-				wkbps = fields[4]
-				dkbps = fields[5]
-				util = fields[9]
-				rkbps_list.append(float(rkbps))
-				wkbps_list.append(float(wkbps))
-				dkbps_list.append(float(dkbps))
-				util_list.append(float(util))
+		
 
-def pad_values():
-	global cpu_usage_list,memory_percent_usage_list
-	start_time = time.time()
-	while(time.time() - start_time <= 0.001):
-		x = psutil.cpu_percent(0.0005)
-		y = psutil.virtual_memory()[2]
-		cpu_usage_list.append(x)
-		memory_percent_usage_list.append(y)
-	
+def diskMonitor():
+	global rkbps_list, wkbps_list, dkbps_list, util_list
+	output = subprocess.check_output(["sar", "-d", "1", "1"])
+	output = output.decode("utf-8")
+	lines = output.split("\n")
+	for line in lines:
+		if re.search("^Average.*dev8.*", line):
+			fields = line.split()
+			rkbps = fields[3]
+			wkbps = fields[4]
+			dkbps = fields[5]
+			util = fields[9]
+			rkbps_list.append(float(rkbps))
+			wkbps_list.append(float(wkbps))
+			dkbps_list.append(float(dkbps))
+			util_list.append(float(util))
 	
 if __name__ == "__main__":
 	
 	t1 = threading.Thread(target=compress,name="t1")
 	t2 = threading.Thread(target=monitor,name="t2")
+	t3 = threading.Thread(target=diskMonitor,name='t3')
 	
-	#pad_values()
-	
+	t3.start()
 	t2.start()
 	t1.start()
 	
+	t3.join()
 	t2.join()
 	t1.join()
 
@@ -76,12 +71,26 @@ if __name__ == "__main__":
 	org_file_size = os.stat('./{}'.format(x[6]))
 	size = org_file_size.st_size
 	sizeToStr = str(size)
+	# create directory for plots
 	plotsPath = './plots/'+sizeToStr
 	if not os.path.exists(plotsPath):
 		os.makedirs(plotsPath)
+
 	
-	#pad_values()
-	
+	ls = sys.argv[2].split()
+	dir = ls[0]
+	#create directory for memory usage compression/decompression statistics
+	mem = './plots/'+sizeToStr+'/memoryUsage/'+dir
+	if not os.path.exists(mem):
+		os.makedirs(mem)
+
+
+
+	#create directory for cpu usage compression/decompression statistics
+	cpu = './plots/'+sizeToStr+'/cpuUsage/'+dir
+	if not os.path.exists(cpu):
+		os.makedirs(cpu)
+
 	l = len(cpu_usage_list)
 	time_values = []
 	for i in range(l):
@@ -89,36 +98,25 @@ if __name__ == "__main__":
 
 	x = len(time_values)
 	
-	plt.bar(time_values, cpu_usage_list, color = 'r')
+	plt.plot(time_values, cpu_usage_list)	
 	plt.xlabel("Time interval")
 	plt.ylabel("CPU usage in percentage")
 	plt.title("CPU usage for " + sys.argv[2] + ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./'+plotsPath+'/CPU usage for ' + sys.argv[2] + '.png')
+	plt.savefig('./'+cpu+'/'+'/CPU usage for ' + sys.argv[2] + '.png')
 	plt.close()
 	
-	plt.bar(time_values, memory_percent_usage_list)
+	plt.plot(time_values, memory_percent_usage_list)
 	plt.xlabel("Time interval")
 	plt.ylabel("Memory usage in percentage")
 	plt.title("Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
 	plt.tick_params(axis='x', labelrotation=-45)
 	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./'+plotsPath+'/Memory usage for ' + sys.argv[2] + '.png')
-	plt.close()
-
-	#plt.bar(time_values, rkbps_list)
-	#plt.bar(time_values, wkbps_list)
-	plt.bar(time_values, util_list)
-	plt.xlabel("Time interval")
-	plt.ylabel("(MEM_UTIL using sar) Memory usage in percentage")
-	plt.title("SAR Memory usage for " + sys.argv[2]+ ', ' + sys.argv[3])
-	plt.tick_params(axis='x', labelrotation=-45)
-	plt.figtext(0.7,0.8,"Time taken : " + str(compression_time))
-	plt.savefig('./'+plotsPath+'/Memory usage for ' + sys.argv[2] + '.png')
+	plt.savefig('./'+mem+'/Memory usage for ' + sys.argv[2] + '.png')
 	plt.close()
 	
-
+	
 	path = './CSV/compression_stats.csv'
 	isExist = os.path.isfile(path)
 	if(not(isExist)):
